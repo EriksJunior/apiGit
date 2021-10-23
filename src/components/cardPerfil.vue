@@ -11,10 +11,12 @@
         <p>Nome: {{ dados.name }}</p>
         <p>Cidade: {{ dados.location }}</p>
         <p>Bio: {{ dados.bio }}</p>
-        <p>testeeee</p>
       </div>
 
-      <p><button id="buscar">Buscar</button></p>
+      <div class="realizarBuscar">
+        <p><input type="text" v-model="nome"/></p>
+        <button id="buscar" @click="buscarDados">Buscar</button>
+      </div>
     </div>
   </div>
 </template>
@@ -27,13 +29,16 @@ export default {
   data() {
     return {
       dados: {},
+      nome: ''
     };
   },
-  mounted() {
-    Pessoa.listar().then(({ data }) => {
-      this.dados = data;
-      console.log(data);
-    });
+  methods: {
+    buscarDados() {
+      Pessoa.listar(this.nome).then(({ data }) => {
+        this.dados = data;
+        console.log(data);
+      });
+    },
   },
 };
 </script>
@@ -50,6 +55,9 @@ export default {
 
 #infoPessoa {
   width: 300px;
+}
+
+.realizarBuscar {
 }
 
 #buscar {

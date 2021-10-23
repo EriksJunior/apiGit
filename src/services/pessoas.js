@@ -1,7 +1,7 @@
 import { http } from './config'
 
 export default {
-    listar: () => {
-        return http.get('')
+    listar: (nome) => {
+        return http.get(`${nome}`)
     }
 }
