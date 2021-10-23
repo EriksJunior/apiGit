@@ -11,6 +11,7 @@
         <p>Nome: {{ dados.name }}</p>
         <p>Cidade: {{ dados.location }}</p>
         <p>Bio: {{ dados.bio }}</p>
+        <p>testeeee</p>
       </div>
 
       <p><button id="buscar">Buscar</button></p>
