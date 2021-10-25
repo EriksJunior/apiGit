@@ -3,7 +3,7 @@
     <div id="dadosGerais">
       <div id="logoConfig">
         <img
-          src="https://images.tcdn.com.br/img/img_prod/697730/adesivo_lateral_vidro_caminhao_carro_decorativo_rick_and_morty_1147486360_1_20201210150106.jpg"
+          :src="dados.avatar_url != '' ? dados.avatar_url : avatar"
           id="logo"
         />
       </div>
@@ -14,8 +14,9 @@
       </div>
 
       <div class="realizarBuscar">
-        <p><input type="text" v-model="nome"/></p>
-        <button id="buscar" @click="buscarDados()">Buscar</button>
+        <p ><input type="text" placeholder="nome..." v-model="nome"/></p>
+        <button class="buscar" @click="buscarDados">BUSCAR</button>
+        <button class="buscar" @click="limparBusca">LIMPAR</button>
       </div>
     </div>
   </div>
@@ -28,21 +29,34 @@ import { http } from "../services/config"
 export default {
   data() {
     return {
-      dados: {},
-      nome: ''
+      dados: {name: '', bio: '', location: '', avatar_url: ''},
+      nome: '',
+      avatar: 'https://cdn-icons-png.flaticon.com/512/147/147144.png',
     };
   },
   methods: {
     async buscarDados() {
       try {
-        const {data} = await http.get('users/' + this.nome)
-        this.dados = data
+        if(this.nome === ''){
+            alert('Informe um nome para realizar a busca')
+            return 
+          }
+        const {data} = await http.get(`users/${this.nome}`)
+        Object.assign(this.dados, data)
+        this.nome = ''
         console.log(data)
+        return data
         
       } catch (error) {
-        console.log(error)
+        alert('Usuario não encontrado')
       }
     },
+    limparBusca(){
+      this.dados.name = ''
+      this.dados.bio = ''
+      this.dados.location = ''
+      this.dados.avatar_url = ''
+    }
   },
 };
 </script>
@@ -57,6 +71,13 @@ export default {
   border-radius: 5px;
 }
 
+input{
+  border-radius: 5px;
+  height: 25px;
+  text-align: center;
+  font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
+}
+
 #infoPessoa {
   width: 300px;
 }
@@ -64,10 +85,15 @@ export default {
 .realizarBuscar {
 }
 
-#buscar {
+.buscar {
   border-radius: 5px;
   border-radius: 5px;
   margin-top: 65px;
+  font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  box-shadow: 0px;
+  outline: none;
+  height: 25px;
+
 }
 
 p {
@@ -87,5 +113,6 @@ p {
   margin-top: 8px;
   background-color: white;
   border-radius: 50%;
+  outline: none;
 }
 </style>
