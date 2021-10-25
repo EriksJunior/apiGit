@@ -15,7 +15,7 @@
 
       <div class="realizarBuscar">
         <p><input type="text" v-model="nome"/></p>
-        <button id="buscar" @click="buscarDados">Buscar</button>
+        <button id="buscar" @click="buscarDados()">Buscar</button>
       </div>
     </div>
   </div>
@@ -23,7 +23,7 @@
 
 
 <script>
-import Pessoa from "../services/pessoas";
+import { http } from "../services/config"
 
 export default {
   data() {
@@ -33,11 +33,15 @@ export default {
     };
   },
   methods: {
-    buscarDados() {
-      Pessoa.listar(this.nome).then(({ data }) => {
-        this.dados = data;
-        console.log(data);
-      });
+    async buscarDados() {
+      try {
+        const {data} = await http.get('users/' + this.nome)
+        this.dados = data
+        console.log(data)
+        
+      } catch (error) {
+        console.log(error)
+      }
     },
   },
 };
